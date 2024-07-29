@@ -190,6 +190,12 @@ async function dispatchRoomImageMsg(msg: Message, room: Room) {
   const alias = await contact.alias()
   const name = alias ? `${contact.name()}(${alias})` : contact.name()
   log.info(`群【${topic}】【${name}】 发送了图片`)
+
+  // 存储每次发出的图片
+  const img = await msg.toFileBox()
+  img.toFile('/tmp/moyu-chat_tmp.jpg', true)
+  // img.toFile('C://Users/tmf/Desktop/moyuchat_test.jpg', true) // Windows debug
+  log.info('图片存储至/tmp/moyu-chat_tmp.jpg')
 }
 
 async function dispatchFriendImageMsg(msg: Message) {

@@ -5,10 +5,13 @@ import { onLogin } from './listeners/onLogin.ts'
 import { onLogout } from './listeners/onLogout.ts'
 import { onMessage } from './listeners/onMessage.ts'
 import { onReady } from './listeners/onReady.ts'
-import { sendContactMsg, sendRoomMsg } from './services/sendMessage.ts'
+import { sendContactMsg, sendRoomImage, sendRoomMsg } from './services/sendMessage.ts'
 import { string2utf8 } from './utils/string2utf8.ts'
 
 const app = express()
+
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: false })) // for parsing application/x-www-form-urlencoded
 
 const bot = WechatyBuilder.build({
   name: 'test-bot',
@@ -62,6 +65,56 @@ app.get('/1', async (req, res) => {
   }
   else {
     res.send('缺少群名')
+  }
+})
+
+app.post('/post/0', async (req, res) => {
+  if (req.body.name || req.body.alias) {
+    if (req.body.content) {
+      const content = req.body.content
+      const name = req.body.name
+      const alias = req.body.alias
+      await sendContactMsg(bot, content, alias, name)
+      res.send({ success: 'true', msg: '联系人消息成功' })
+    }
+    else {
+      res.send({ success: 'false', msg: '缺少发送内容' })
+    }
+  }
+  else {
+    res.send({ success: 'false', msg: '缺少用户名/备注' })
+  }
+})
+
+app.post('/post/1', async (req, res) => {
+  if (req.body.name) {
+    if (req.body.content) {
+      const content = req.body.content
+      const name = req.body.name
+      await sendRoomMsg(bot, content, name)
+      res.send({ success: 'true', msg: '群消息发送成功' })
+    }
+    else {
+      res.send({ success: 'false', msg: '缺少发送内容' })
+    }
+  }
+  else {
+    res.send({ success: 'false', msg: '缺少群名' })
+  }
+})
+
+app.post('/post/1/img_tmp', async (req, res) => {
+  if (req.body.name) {
+    const name = req.body.name
+    const err = await sendRoomImage(bot, '/tmp/moyu-chat_tmp.jpg', name)
+    // const err = await sendRoomImage(bot, 'C://Users/tmf/Desktop/open-the-door APP/bg_open_door.jpg', name) // for Windows debug
+    if (err)
+      res.send({ success: 'false', msg: '群图片发送失败' })
+    else
+      res.send({ success: 'true', msg: '群图片发送成功' })
+  }
+  else {
+    res.send({ success: 'false', msg: '缺少群名' })
   }
 })
 
