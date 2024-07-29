@@ -9,6 +9,7 @@
       "terminal.foreground": "#808080"
     },
     "cSpell.words": [
+      "mkfifo",
       "moyu",
       "moyuchat",
       "Wechaty",

@@ -5,7 +5,7 @@ import path from 'node:path'
 import { log } from 'wechaty'
 import Ffmpeg from 'fluent-ffmpeg'
 import type { Message, Room } from 'wechaty'
-import { robotConfig } from '../configs/robot.ts'
+import { IPC, robotConfig } from '../configs/robot.ts'
 import { asr } from '../utils/asr.ts'
 
 const startTime = new Date()
@@ -196,6 +196,7 @@ async function dispatchRoomImageMsg(msg: Message, room: Room) {
   img.toFile('/tmp/moyu-chat_tmp.jpg', true)
   // img.toFile('C://Users/tmf/Desktop/moyuchat_test.jpg', true) // Windows debug
   log.info('图片存储至/tmp/moyu-chat_tmp.jpg')
+  IPC(`[群][${topic}]:图片已保存`)
 }
 
 async function dispatchFriendImageMsg(msg: Message) {
