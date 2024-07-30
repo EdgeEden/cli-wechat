@@ -86,6 +86,7 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
 
   const name = alias ? `${contact.name()}(${alias})` : contact.name()
   log.info(`群【${topic}】【${name}】 发送了：${content}`)
+  IPC(`群【${topic}】【${name}】 发送了：${content}`)
 }
 
 /**
@@ -196,7 +197,7 @@ async function dispatchRoomImageMsg(msg: Message, room: Room) {
   img.toFile('/tmp/moyu-chat_tmp.jpg', true)
   // img.toFile('C://Users/tmf/Desktop/moyuchat_test.jpg', true) // Windows debug
   log.info('图片存储至/tmp/moyu-chat_tmp.jpg')
-  IPC(`[群][${topic}]:图片已保存`)
+  IPC(`群【${topic}】【${name}】：图片已保存`)
 }
 
 async function dispatchFriendImageMsg(msg: Message) {
